@@ -7,12 +7,17 @@ const Room=require('./models/Room')
 const axios=require('axios')
 const express=require("express")
 const app=express()
+app.use(express.json());
+const cors = require("cors");
+app.use(cors({
+    origin: process.env.CLIENT_URL || "*"
+}));
 const http=require('http')
 const {Server} = require('socket.io')
 const server =http.createServer(app)
 const io=new Server(server,{
     cors:{
-        origin:'http://localhost:5173',
+        origin: process.env.CLIENT_URL || "*",
         methods:['GET','POST']
     }
 })
@@ -77,8 +82,7 @@ io.on('connection',(socket)=>{
     socket.on('run-code',async({roomId,language,sourceCode,stdin})=>{
         try{
             const encodedSourceCode = Buffer.from(sourceCode).toString('base64')
-            const encodedStdin = Buffer.from(stdin).toString('base64')
-             console.log('Attempting to use API Key:', process.env.JUDGE0_API_KEY)
+            const encodedStdin = Buffer.from(stdin || "").toString('base64')
             const response=await axios.post(
                  'https://judge0-ce.p.rapidapi.com/submissions?base64_encoded=true&wait=true',
                  {
@@ -115,6 +119,8 @@ io.on('connection',(socket)=>{
         socket.leave();
 })
 })
-
+app.get("/", (req, res) => {
+    res.send("Server is running 🚀");
+});
 const PORT=process.env.PORT || 5000
 server.listen(PORT,()=> console.log("Server is running"))
