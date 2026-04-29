@@ -1,3 +1,7 @@
+console.log("ENV CHECK:");
+console.log("MONGO_URI:", process.env.MONGO_URI ? "OK" : "MISSING");
+console.log("CLIENT_URL:", process.env.CLIENT_URL);
+console.log("JUDGE0:", process.env.JUDGE0_API_KEY ? "OK" : "MISSING");
 if (!process.env.MONGO_URI) {
   console.error("MONGO_URI missing");
   process.exit(1);
@@ -8,8 +12,11 @@ mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-  .then(() => console.log('MongoDB connected successfully'))
-  .catch(err => console.error('MongoDB connection error:', err));
+.then(() => console.log('MongoDB connected successfully'))
+.catch(err => {
+  console.error('MongoDB connection error:', err);
+  process.exit(1);
+});
 const Room=require('./models/Room')
 const axios=require('axios')
 const express=require("express")
