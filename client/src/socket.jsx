@@ -7,10 +7,12 @@ export const initSocket = () => {
         forceNew: true,
         reconnectionAttempts: Infinity,
         timeout: 10000,
-        transports: ['websocket'],
     };
 
     console.log("Connecting to:", backendUrl); // debug
 
-    return io(backendUrl, options);
+    return io(backendUrl, {
+    transports: ['polling', 'websocket'], // allow fallback
+    withCredentials: true,
+});
 };
