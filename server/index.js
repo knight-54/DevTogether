@@ -1,3 +1,10 @@
+require('dotenv').config()
+const express=require("express")
+const cors = require("cors");
+const mongoose = require('mongoose')
+const Room=require('./models/Room')
+const axios=require('axios')
+const http=require('http')
 console.log("ENV CHECK:");
 console.log("MONGO_URI:", process.env.MONGO_URI ? "OK" : "MISSING");
 console.log("CLIENT_URL:", process.env.CLIENT_URL);
@@ -6,8 +13,6 @@ if (!process.env.MONGO_URI) {
   console.error("MONGO_URI missing");
   process.exit(1);
 }
-require('dotenv').config()
-const mongoose = require('mongoose')
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -17,12 +22,8 @@ mongoose.connect(process.env.MONGO_URI, {
   console.error('MongoDB connection error:', err);
   process.exit(1);
 });
-const Room=require('./models/Room')
-const axios=require('axios')
-const express=require("express")
 const app=express()
 app.use(express.json());
-const cors = require("cors");
 const allowedOrigin = process.env.CLIENT_URL || "http://localhost:3000";
 
 app.use(cors({
@@ -39,7 +40,6 @@ const io = new Server(server, {
     credentials: true
   }
 });
-const http=require('http')
 const userSocketMap={}
 
 
