@@ -48,10 +48,10 @@
    Install dependencies for both the client and server:
 
    Start the backend server (from the server directory): 
-    node index.js
+      node index.js
 
    Start the frontend client (from the client directory): 
-    npm run dev
+      npm run dev
 
   5. Snapshots
      
