@@ -1,6 +1,13 @@
+if (!process.env.MONGO_URI) {
+  console.error("MONGO_URI missing");
+  process.exit(1);
+}
 require('dotenv').config()
 const mongoose = require('mongoose')
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
 const Room=require('./models/Room')
@@ -9,18 +16,23 @@ const express=require("express")
 const app=express()
 app.use(express.json());
 const cors = require("cors");
+const allowedOrigin = process.env.CLIENT_URL || "http://localhost:3000";
+
 app.use(cors({
-    origin: process.env.CLIENT_URL || "*"
+  origin: allowedOrigin,
+  credentials: true
 }));
+
+const io = new Server(server, {
+  cors: {
+    origin: allowedOrigin,
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+});
 const http=require('http')
 const {Server} = require('socket.io')
 const server =http.createServer(app)
-const io=new Server(server,{
-    cors:{
-        origin: process.env.CLIENT_URL || "*",
-        methods:['GET','POST']
-    }
-})
 const userSocketMap={}
 
 
