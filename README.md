@@ -3,6 +3,7 @@
      DevTogether: A Real-Time Collaborative Code Editor
      A web application for collaborative coding in real time. It allows multiple users to join a single room, write code together, and run it directly in the browser, with support for multiple programming languages.
 
+   Project: https://dev-together-azure.vercel.app/
 2. Features
 
    Real-time synchronization: Instantly see code changes from all collaborators.
